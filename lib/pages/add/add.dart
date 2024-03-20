@@ -30,11 +30,18 @@ class _AddRouterState extends State<AddRouter> {
               child: staffList(),
             ),
           ),
-          RatingBar(_selectedRating, (rating) {
-            setState(() {
-              _selectedRating = rating;
-            });
-          }),
+          Container(
+            padding: EdgeInsets.all(10.0), // 添加内边距
+            decoration: BoxDecoration(
+              color: Colors.blue[50], // 设置背景色
+              borderRadius: BorderRadius.circular(10.0), // 设置圆角
+            ),
+            child: RatingBar(_selectedRating, (rating) {
+              setState(() {
+                _selectedRating = rating;
+              });
+            }),
+          ),
 
           Flexible(
             flex: 1,
@@ -171,16 +178,15 @@ class RatingBar extends StatelessWidget {
       children: List.generate(5, (index) {
         return GestureDetector(
           onTap: () => onRatingUpdate(index + 1),
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 2.0),
-            width: 20,
-            height: 5,
-            decoration: BoxDecoration(
-              color: _getColor(index + 1),
-              borderRadius: BorderRadius.circular(2.5),
-              border: Border.all(color: Colors.black, width: 1),
+          child: CustomPaint(
+            painter: StarShape(_getColor(index + 1)),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 2.0),
+              width: 20,
+              height: 20,
             ),
-          ),
+          )
+
         );
       }),
     );
@@ -200,3 +206,39 @@ class RatingBar extends StatelessWidget {
     }
   }
 }
+
+class StarShape extends CustomPainter {
+  final Color color;
+
+  StarShape(this.color);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint();
+    paint.color = color;
+    paint.style = PaintingStyle.fill;
+
+    final Path path = Path();
+    final double width = size.width;
+    final double height = size.height;
+
+    path.moveTo(width / 2, 0);
+    path.lineTo(width * 3 / 5, height * 2 / 5);
+    path.lineTo(width, height * 2 / 5);
+    path.lineTo(width * 3 / 4, height * 4 / 5);
+    path.lineTo(width * 4 / 5, height);
+    path.lineTo(width / 2, height * 3 / 4);
+    path.lineTo(width / 5, height);
+    path.lineTo(width / 4, height * 4 / 5);
+    path.lineTo(0, height * 2 / 5);
+    path.lineTo(width * 2 / 5, height * 2 / 5);
+    path.close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+} //star shape
