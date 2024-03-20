@@ -13,6 +13,8 @@ class _AddRouterState extends State<AddRouter> {
     'staff name': '',
   };
 
+  int _selectedRating = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +30,12 @@ class _AddRouterState extends State<AddRouter> {
               child: staffList(),
             ),
           ),
+          RatingBar(_selectedRating, (rating) {
+            setState(() {
+              _selectedRating = rating;
+            });
+          }),
+
           Flexible(
             flex: 1,
             child: Container(
@@ -145,5 +153,50 @@ class _AddRouterState extends State<AddRouter> {
         ],
       ),
     );
+  }
+
+
+}
+
+class RatingBar extends StatelessWidget {
+  final int selectedRating;
+  final ValueChanged<int> onRatingUpdate;
+
+  RatingBar(this.selectedRating, this.onRatingUpdate);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(5, (index) {
+        return GestureDetector(
+          onTap: () => onRatingUpdate(index + 1),
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 2.0),
+            width: 20,
+            height: 5,
+            decoration: BoxDecoration(
+              color: _getColor(index + 1),
+              borderRadius: BorderRadius.circular(2.5),
+              border: Border.all(color: Colors.black, width: 1),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
+  Color _getColor(int index) {
+    if (index <= selectedRating) {
+      if (selectedRating <= 2) {
+        return Colors.red;
+      } else if (selectedRating == 3) {
+        return Colors.yellow;
+      } else {
+        return Colors.green;
+      }
+    } else {
+      return Colors.grey;
+    }
   }
 }
