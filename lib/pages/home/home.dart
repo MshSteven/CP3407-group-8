@@ -3,168 +3,215 @@ import 'package:flutter/material.dart';
 import 'tutor_list.dart';
 
 
-  class _tutor_cell extends StatelessWidget {
-    _tutor_cell({ required this.imageUrl,
-      required this.name,
-      required this.groupTitle,
-    required this.imageAsset});
-    final String imageUrl;
-    final String name;
-    final String groupTitle;
-    final String imageAsset;
+class TutorListView extends StatefulWidget {
+  @override
+  _TutorListViewState createState() => _TutorListViewState();
+}
 
-    @override
-    Widget build(BuildContext context) {
-      return Container(
-        color: Colors.white,
-        child: Row(
+class _TutorListViewState extends State<TutorListView> {
+  late List<tutor_data> _sortedData;
+
+  @override
+  void initState() {
+    super.initState();
+    _sortedData = datas..sort((a, b) => a.indexLetter.compareTo(b.indexLetter));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: _sortedData.length,
+      itemBuilder: (context, index) {
+        final tutorData = _sortedData[index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: EdgeInsets.all(10),
-              width: 40,
-              height: 34,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6.0),
-                image: DecorationImage(
-                  image: AssetImage('assets/images/OIP.jpg')//待办
-                )
-
-
+            if (index == 0 || _sortedData[index].indexLetter != _sortedData[index - 1].indexLetter)
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                child: Text(
+                  tutorData.indexLetter,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                ),
               ),
-            ), //pic
-            Container(
-              child: Text(
-                name,
-                style: TextStyle(fontSize: 18),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    width: 40,
+                    height: 34,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6.0),
+                      image: DecorationImage(
+                        image: NetworkImage(tutorData.imageUrl),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    tutorData.name,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
               ),
-            ), //name
+            ),
           ],
-        ),
-      );
-    }
-  }
-
-
-
-  class FirstRoute extends StatelessWidget {
-
-    Widget _separatorBuilder(BuildContext context, int index) {
-      if (index == 0 || datas[index].indexLetter != datas[index - 1].indexLetter) {
-        // Display a separator before a new group
-        return ListTile(
-          title: Text(datas[index].indexLetter), // Display the group title here
-          // Adjust styling as needed
         );
-      }
-      // No separator needed
-      return SizedBox.shrink();
-    }
-
-    Widget? _itemForRow(BuildContext context, int index) {
-      return _tutor_cell(
-        imageUrl: datas[index].imageUrl,
-        name: datas[index].name,
-        groupTitle: datas[index].indexLetter,
-        imageAsset: 'assets/images/OIP.jpg',
-      );
-
-    }
+      },
+    );
+  }
+}
 
 
-    @override
-    Widget build(BuildContext context) {
-      datas.sort((a, b) => a.indexLetter.compareTo(b.indexLetter));
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Home Page'),
-        ),
-        body: Column(
-          children: <Widget>[
-            SearchBarWidget(),
-            Expanded(
-              child: ListView.separated(separatorBuilder: _separatorBuilder,itemBuilder: _itemForRow, itemCount: datas.length,),
-            )
 
-          ],
+class FirstRoute extends StatelessWidget {
 
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Add',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-          onTap: (int index) {
-            if (index == 0) {
-              // Home button pressed
-              // You can optionally add code here to navigate to the home route
-            } else if (index == 1) {
-              // Add button pressed
-              Navigator.pushNamed(context, '/add');
-            } else if (index == 2) {
-              // Profile button pressed
-              Navigator.pushNamed(context, '/profile');
-            }
-          },
+  Widget _separatorBuilder(BuildContext context, int index) {
+    if (index == 0 || datas[index].indexLetter != datas[index - 1].indexLetter) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+        child: Text(
+          datas[index].indexLetter,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18.0,
+          ),
         ),
       );
     }
+    return SizedBox.shrink();
+  }
 
+  Widget? _itemForRow(BuildContext context, int index) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
 
+          Container(
+            margin: EdgeInsets.all(10),
+            width: 40,
+            height: 34,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6.0),
+              image: DecorationImage(
+                image: NetworkImage(datas[index].imageUrl),
+              ),
+            ),
+          ),
+          Text(
+            datas[index].name,
+            style: TextStyle(fontSize: 18),
+          ),
+        ],
+      ),
+    );
   }
 
 
-  class SearchBarWidget extends StatefulWidget {
-    @override
-    _SearchBarWidgetState createState() => _SearchBarWidgetState();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home Page'),
+      ),
+      body: Column(
+        children: <Widget>[
+          SearchBarWidget(),
+          Expanded(
+            child: TutorListView(),
+          )
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Add',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        onTap: (int index) {
+          if (index == 0) {
+            // Home button pressed
+            // You can optionally add code here to navigate to the home route
+          } else if (index == 1) {
+            // Add button pressed
+            Navigator.pushNamed(context, '/add');
+          } else if (index == 2) {
+            // Profile button pressed
+            Navigator.pushNamed(context, '/profile');
+          }
+        },
+      ),
+    );
   }
 
 
-  class _SearchBarWidgetState extends State<SearchBarWidget> {
-    String selectedItem = '';
+}
 
-    @override
-    Widget build(BuildContext context) {
-      return SearchAnchor(
-          builder: (BuildContext context, SearchController controller) {
-            return SearchBar(
-              controller: controller,
-              padding: const MaterialStatePropertyAll<EdgeInsets>(
-                  EdgeInsets.symmetric(horizontal: 16.0)),
-              onTap: () {
-                controller.openView();
-              },
-              onChanged: (_) {
-                controller.openView();
-              },
-              leading: const Icon(Icons.search),
-            );
-          }, suggestionsBuilder:
-          (BuildContext context, SearchController controller) {
-        return List<ListTile>.generate(5, (int index) {
-          final String item = 'item $index';
-          return ListTile(
-            title: Text(item),
+
+class SearchBarWidget extends StatefulWidget {
+  @override
+  _SearchBarWidgetState createState() => _SearchBarWidgetState();
+}
+
+
+class _SearchBarWidgetState extends State<SearchBarWidget> {
+  String selectedItem = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchAnchor(
+        builder: (BuildContext context, SearchController controller) {
+          return SearchBar(
+            controller: controller,
+            padding: const MaterialStatePropertyAll<EdgeInsets>(
+                EdgeInsets.symmetric(horizontal: 16.0)),
             onTap: () {
-              setState(() {
-                selectedItem = item;
-                controller.closeView(item);
-              });
+              controller.openView();
             },
+            onChanged: (_) {
+              controller.openView();
+            },
+            leading: const Icon(Icons.search),
           );
-        });
-      }
-      );
-    }
-  }
+        },
+        suggestionsBuilder: (BuildContext context, SearchController controller) {
+          List<tutor_data> suggestions = datas.where((tutorData) {
+            String name = tutorData.name.toLowerCase();
+            String input = controller.value.text.toLowerCase();
+            return name.contains(input);
+          }).toList();
 
-  // class tutor_data extends  //待办
+          return List<ListTile>.generate(suggestions.length, (int index) {
+            final tutor_data tutorData = suggestions[index];
+            return ListTile(
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(tutorData.imageUrl),
+              ),
+              title: Text(tutorData.name),
+              onTap: () {
+                setState(() {
+                  selectedItem = tutorData.name;
+                  controller.closeView(tutorData.name);
+                });
+              },
+            );
+          });
+        }      );
+  }
+}
+
+// class tutor_data extends  //待办
