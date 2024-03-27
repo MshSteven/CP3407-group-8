@@ -1,17 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mysql1/mysql1.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:async';
-import 'dart:io';
-import 'package:project/db/db_connector.dart';
-
-Future<void> _loadDataFromDB() async {
-  final dbConnector = DBConnector();
-  var dataFromDB = await dbConnector.executeQuery('SELECT * FROM your_table');
-  // Process the data here as needed.
-}
-
-// Call the method when you want to fetch data from the database.
 
 class AddRouter extends StatefulWidget {
   @override
@@ -32,7 +19,7 @@ class _AddRouterState extends State<AddRouter> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter 输入区域示例'),
+        title: Text('Add Content'),
       ),
       body: Column(
         children: <Widget>[
@@ -69,6 +56,7 @@ class _AddRouterState extends State<AddRouter> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -77,6 +65,7 @@ class _AddRouterState extends State<AddRouter> {
           BottomNavigationBarItem(
             icon: Icon(Icons.add),
             label: 'Add',
+
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -257,17 +246,4 @@ class StarShape extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
   }
-}
-
-Future<MySqlConnection> _connectToMySql() async {
-  final connectionSettings = ConnectionSettings(
-    host: 'your_host',
-    port: 3306,
-    user: 'your_user',
-    password: 'your_password',
-    db: 'your_database',
-  );
-
-  final connection = await MySqlConnection.connect(connectionSettings);
-  return connection;
 }

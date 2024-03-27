@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'tutor_list.dart';
 
-class TutorDetailPage extends StatelessWidget {
-  final int tutorId;
-
-  TutorDetailPage({required this.tutorId});
-
-  @override
-  Widget build(BuildContext context) {
-    // 在这里实现详情页面的UI
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Tutor Detail'),
-      ),
-      body: Center(
-        child: Text('Tutor ID: $tutorId'),
-      ),
-    );
-  }
-}
+// class TutorDetailPage extends StatelessWidget {
+//   final int tutorId;
+//
+//   TutorDetailPage({required this.tutorId});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // 在这里实现详情页面的UI
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Tutor Detail'),
+//       ),
+//       body: Center(
+//         child: Text('Tutor ID: $tutorId'),
+//       ),
+//     );
+//   }
+// }
 
 class TutorListView extends StatefulWidget {
   @override
@@ -34,12 +34,16 @@ class _TutorListViewState extends State<TutorListView> {
     _sortedData = datas..sort((a, b) => a.indexLetter.compareTo(b.indexLetter));
   }
 
-  void _navigateToDetailPage(int tutorId) {
-    Navigator.push(
+  void _navigateToDetailPage(int tutorId, String tutorName, String tutorImageUrl) {
+    final arguments = {
+      'tutorId': tutorId,
+      'tutorName': tutorName,
+      'tutorImageUrl': tutorImageUrl,
+    };
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => TutorDetailPage(tutorId: tutorId),
-      ),
+      '/detail',
+      arguments: arguments,
     );
   }
 
@@ -50,7 +54,11 @@ class _TutorListViewState extends State<TutorListView> {
       itemBuilder: (context, index) {
         final tutorData = _sortedData[index];
         return GestureDetector(
-          onTap: () => _navigateToDetailPage(tutorData.id),
+            onTap: () => _navigateToDetailPage(
+              tutorData.id,
+              tutorData.name,
+              tutorData.imageUrl,
+            ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
