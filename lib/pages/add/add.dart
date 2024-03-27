@@ -3,7 +3,7 @@ import 'package:mysql1/mysql1.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:io';
-import 'db_connector.dart';
+import 'package:project/db/db_connector.dart';
 
 Future<void> _loadDataFromDB() async {
   final dbConnector = DBConnector();
