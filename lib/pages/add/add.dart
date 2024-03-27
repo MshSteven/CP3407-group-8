@@ -1,4 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mysql1/mysql1.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:async';
+import 'dart:io';
+import 'db_connector.dart';
+
+Future<void> _loadDataFromDB() async {
+  final dbConnector = DBConnector();
+  var dataFromDB = await dbConnector.executeQuery('SELECT * FROM your_table');
+  // Process the data here as needed.
+}
+
+// Call the method when you want to fetch data from the database.
 
 class AddRouter extends StatefulWidget {
   @override
@@ -222,16 +235,19 @@ class StarShape extends CustomPainter {
     final double width = size.width;
     final double height = size.height;
 
-    path.moveTo(width / 2, 0);
-    path.lineTo(width * 3 / 5, height * 2 / 5);
-    path.lineTo(width, height * 2 / 5);
-    path.lineTo(width * 3 / 4, height * 4 / 5);
-    path.lineTo(width * 4 / 5, height);
-    path.lineTo(width / 2, height * 3 / 4);
-    path.lineTo(width / 5, height);
-    path.lineTo(width / 4, height * 4 / 5);
-    path.lineTo(0, height * 2 / 5);
-    path.lineTo(width * 2 / 5, height * 2 / 5);
+    // 五角星的五个顶点
+    final List<Offset> starPoints = [
+      Offset(width / 2, 0),
+      Offset(width * 0.8, height),
+      Offset(0, height * 0.3),
+      Offset(width, height * 0.3),
+      Offset(width * 0.2, height),
+    ];
+
+    path.moveTo(starPoints[0].dx, starPoints[0].dy);
+    for (int i = 1; i < starPoints.length; i++) {
+      path.lineTo(starPoints[i].dx, starPoints[i].dy);
+    }
     path.close();
 
     canvas.drawPath(path, paint);
@@ -241,4 +257,17 @@ class StarShape extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
   }
-} //star shape
+}
+
+Future<MySqlConnection> _connectToMySql() async {
+  final connectionSettings = ConnectionSettings(
+    host: 'your_host',
+    port: 3306,
+    user: 'your_user',
+    password: 'your_password',
+    db: 'your_database',
+  );
+
+  final connection = await MySqlConnection.connect(connectionSettings);
+  return connection;
+}

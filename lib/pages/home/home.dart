@@ -1,7 +1,24 @@
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'tutor_list.dart';
 
+class TutorDetailPage extends StatelessWidget {
+  final int tutorId;
+
+  TutorDetailPage({required this.tutorId});
+
+  @override
+  Widget build(BuildContext context) {
+    // 在这里实现详情页面的UI
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Tutor Detail'),
+      ),
+      body: Center(
+        child: Text('Tutor ID: $tutorId'),
+      ),
+    );
+  }
+}
 
 class TutorListView extends StatefulWidget {
   @override
@@ -17,102 +34,68 @@ class _TutorListViewState extends State<TutorListView> {
     _sortedData = datas..sort((a, b) => a.indexLetter.compareTo(b.indexLetter));
   }
 
+  void _navigateToDetailPage(int tutorId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TutorDetailPage(tutorId: tutorId),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: _sortedData.length,
       itemBuilder: (context, index) {
         final tutorData = _sortedData[index];
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (index == 0 || _sortedData[index].indexLetter != _sortedData[index - 1].indexLetter)
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0, top: 8.0),
-                child: Text(
-                  tutorData.indexLetter,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    width: 40,
-                    height: 34,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6.0),
-                      image: DecorationImage(
-                        image: NetworkImage(tutorData.imageUrl),
-                      ),
+        return GestureDetector(
+          onTap: () => _navigateToDetailPage(tutorData.id),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (index == 0 || _sortedData[index].indexLetter != _sortedData[index - 1].indexLetter)
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                  child: Text(
+                    tutorData.indexLetter,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
                     ),
                   ),
-                  Text(
-                    tutorData.name,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
+                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      width: 40,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6.0),
+                        image: DecorationImage(
+                          image: NetworkImage(tutorData.imageUrl),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      tutorData.name,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
   }
 }
 
-
-
 class FirstRoute extends StatelessWidget {
-
-  Widget _separatorBuilder(BuildContext context, int index) {
-    if (index == 0 || datas[index].indexLetter != datas[index - 1].indexLetter) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 16.0, top: 8.0),
-        child: Text(
-          datas[index].indexLetter,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18.0,
-          ),
-        ),
-      );
-    }
-    return SizedBox.shrink();
-  }
-
-  Widget? _itemForRow(BuildContext context, int index) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-
-          Container(
-            margin: EdgeInsets.all(10),
-            width: 40,
-            height: 34,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.0),
-              image: DecorationImage(
-                image: NetworkImage(datas[index].imageUrl),
-              ),
-            ),
-          ),
-          Text(
-            datas[index].name,
-            style: TextStyle(fontSize: 18),
-          ),
-        ],
-      ),
-    );
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,16 +140,12 @@ class FirstRoute extends StatelessWidget {
       ),
     );
   }
-
-
 }
-
 
 class SearchBarWidget extends StatefulWidget {
   @override
   _SearchBarWidgetState createState() => _SearchBarWidgetState();
 }
-
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
   String selectedItem = '';
@@ -174,44 +153,44 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   @override
   Widget build(BuildContext context) {
     return SearchAnchor(
-        builder: (BuildContext context, SearchController controller) {
-          return SearchBar(
-            controller: controller,
-            padding: const MaterialStatePropertyAll<EdgeInsets>(
-                EdgeInsets.symmetric(horizontal: 16.0)),
-            onTap: () {
-              controller.openView();
-            },
-            onChanged: (_) {
-              controller.openView();
-            },
-            leading: const Icon(Icons.search),
-          );
-        },
-        suggestionsBuilder: (BuildContext context, SearchController controller) {
-          List<tutor_data> suggestions = datas.where((tutorData) {
-            String name = tutorData.name.toLowerCase();
-            String input = controller.value.text.toLowerCase();
-            return name.contains(input);
-          }).toList();
+      builder: (BuildContext context, SearchController controller) {
+        return SearchBar(
+          controller: controller,
+          padding: const MaterialStatePropertyAll<EdgeInsets>(
+            EdgeInsets.symmetric(horizontal: 16.0),
+          ),
+          onTap: () {
+            controller.openView();
+          },
+          onChanged: (_) {
+            controller.openView();
+          },
+          leading: const Icon(Icons.search),
+        );
+      },
+      suggestionsBuilder: (BuildContext context, SearchController controller) {
+        List<tutor_data> suggestions = datas.where((tutorData) {
+          String name = tutorData.name.toLowerCase();
+          String input = controller.value.text.toLowerCase();
+          return name.contains(input);
+        }).toList();
 
-          return List<ListTile>.generate(suggestions.length, (int index) {
-            final tutor_data tutorData = suggestions[index];
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(tutorData.imageUrl),
-              ),
-              title: Text(tutorData.name),
-              onTap: () {
-                setState(() {
-                  selectedItem = tutorData.name;
-                  controller.closeView(tutorData.name);
-                });
-              },
-            );
-          });
-        }      );
+        return List<ListTile>.generate(suggestions.length, (int index) {
+          final tutor_data tutorData = suggestions[index];
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(tutorData.imageUrl),
+            ),
+            title: Text(tutorData.name),
+            onTap: () {
+              setState(() {
+                selectedItem = tutorData.name;
+                controller.closeView(tutorData.name);
+              });
+            },
+          );
+        });
+      },
+    );
   }
 }
-
-// class tutor_data extends  //待办
