@@ -15,12 +15,12 @@ def select_tutor(school_name, subject):
 
     # 执行查询
     db_cursor.execute("""
-    SELECT tutor.tutor_name
+    SELECT tutor.name
     FROM tutor
-    JOIN lesson ON tutor.tutor_name = lesson.tutor_name
+    JOIN lesson ON tutor.name = lesson.tutor_name
     JOIN school ON tutor.school_name = school.school_name
     WHERE school.school_name = %s
-    AND lesson.lesson_id = %s;
+    AND lesson.course_number = %s;
     """, (school_name, subject))
     rows = db_cursor.fetchall()
 
