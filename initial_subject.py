@@ -12,11 +12,11 @@ db_connection = mysql.connector.connect(
 # Fix a mistake between tutor and school table
 db_cursor = db_connection.cursor()
 
-db_cursor.execute("""SELECT * FROM user""")
+db_cursor.execute("""SELECT course_number FROM lesson""")
 rows = db_cursor.fetchall()
 
 # 写入CSV文件
-with open('users.csv', 'w', newline='') as csvfile:
+with open('initial_subject.csv', 'w', newline='') as csvfile:
     csv_writer = csv.writer(csvfile)
     # 写入表头
     csv_writer.writerow([i[0] for i in db_cursor.description])
