@@ -40,7 +40,7 @@ def select_tutor(school_name, subject):
 # 从命令行参数中获取学校名称和科目
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python script.py <school_name> <subject>")
+        # print("Usage: python script.py <school_name> <subject>")
         sys.exit(1)
 
     school_name = sys.argv[1]
