@@ -56,7 +56,7 @@ class _AddRouterState extends State<AddRouter> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        
+
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -179,15 +179,15 @@ class RatingBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(5, (index) {
         return GestureDetector(
-          onTap: () => onRatingUpdate(index + 1),
-          child: CustomPaint(
-            painter: StarShape(_getColor(index + 1)),
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 2.0),
-              width: 20,
-              height: 20,
-            ),
-          )
+            onTap: () => onRatingUpdate(index + 1),
+            child: CustomPaint(
+              painter: StarShape(_getColor(index + 1)),
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 2.0),
+                width: 20,
+                height: 20,
+              ),
+            )
 
         );
       }),
