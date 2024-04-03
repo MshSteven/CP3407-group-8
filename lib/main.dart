@@ -33,9 +33,12 @@ class _MyAppState extends State<MyApp> {
               tutorId: arguments['tutorId'] as int,
               tutorName: arguments['tutorName'] as String?,
               tutorImageUrl: arguments['tutorImageUrl'] as String?,
+              rating: arguments['rating'] as double,
+              bio: arguments['bio'] as String,
             );
           }
-          return TutorDetailPage(tutorId: 0); // or throw an error
+          return TutorDetailPage(tutorId: 0, tutorName: 'null',
+              tutorImageUrl: 'null', rating: 0.0, bio: 'null'); // or throw an error
         },
       },      home: FirstRoute(),
     );

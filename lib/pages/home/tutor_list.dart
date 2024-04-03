@@ -4,12 +4,14 @@ class tutor_data {
     required this.imageUrl,
     required this.name,
     required this.indexLetter,
+    required this.rating,
   });
 
   final int id; // 新增的id属性
   final String imageUrl;
   final String name;
   final String indexLetter;
+  final double rating;
 }
 
 List<tutor_data> datas = [
@@ -18,6 +20,7 @@ List<tutor_data> datas = [
     imageUrl: 'https://th.bing.com/th/id/OIP.mMGB5_bhd6wmHAl3MymYHAHaGh?rs=1&pid=ImgDetMain',
     name: 'zhang san',
     indexLetter: 'Z',
+    rating: 5,
   ),
 
   tutor_data(
@@ -25,6 +28,7 @@ List<tutor_data> datas = [
     imageUrl: 'https://th.bing.com/th/id/OIP.mMGB5_bhd6wmHAl3MymYHAHaGh?rs=1&pid=ImgDetMain',
     name: 'li si',
     indexLetter: 'L',
+    rating: 5,
   ),
 
   tutor_data(
@@ -32,6 +36,7 @@ List<tutor_data> datas = [
     imageUrl: 'https://th.bing.com/th/id/OIP.mMGB5_bhd6wmHAl3MymYHAHaGh?rs=1&pid=ImgDetMain',
     name: 'wang wu',
     indexLetter: 'W',
+    rating: 5,
   ),
 
   tutor_data(
@@ -39,6 +44,7 @@ List<tutor_data> datas = [
     imageUrl: 'https://th.bing.com/th/id/OIP.mMGB5_bhd6wmHAl3MymYHAHaGh?rs=1&pid=ImgDetMain',
     name: 'zhang si',
     indexLetter: 'Z',
+    rating: 5,
   ),
 
 ];

@@ -41,4 +41,6 @@ class ProfileRoute extends StatelessWidget {
       ),
     );
   }
+
 }
+
