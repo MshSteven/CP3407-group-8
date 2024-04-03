@@ -6,13 +6,13 @@ with open('Tutor.csv', 'r', newline='') as infile:
     data = list(reader)  # 将数据读取为列表
 
 # creat tutor table
-tutor_table = [['tutor_name', 'education', 'institute', 'status']]
+tutor_table = [['tutor_name', 'education', 'institute', 'status', 'school_name']]
 tutor_primary_key = set()  # 用于检查是否有重复的 name
 
 for row in data[1:]:
-    name, education, institute, _, status, _ = row  # 只获取需要的列
+    name, education, institute, _, status, school_name = row  # 只获取需要的列
     if name not in tutor_primary_key:
-        tutor_table.append([name, education, institute, status])
+        tutor_table.append([name, education, institute, status, school_name])
         tutor_primary_key.add(name)
 
 # create lesson table
