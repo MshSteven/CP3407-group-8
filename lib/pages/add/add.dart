@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'data.dart';
 
 class AddRouter extends StatefulWidget {
   @override
   _AddRouterState createState() => _AddRouterState();
 }
-
 
 class _AddRouterState extends State<AddRouter> {
   Map<String, String> selected = {
@@ -14,6 +14,10 @@ class _AddRouterState extends State<AddRouter> {
   };
 
   int _selectedRating = 0;
+
+  List<String> subjects = [];
+  List<String> tutors = [];
+  TextEditingController _writingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +35,10 @@ class _AddRouterState extends State<AddRouter> {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(10.0), // 添加内边距
+            padding: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
-              color: Colors.blue[50], // 设置背景色
-              borderRadius: BorderRadius.circular(10.0), // 设置圆角
+              color: Colors.blue[50],
+              borderRadius: BorderRadius.circular(10.0),
             ),
             child: RatingBar(_selectedRating, (rating) {
               setState(() {
@@ -42,7 +46,6 @@ class _AddRouterState extends State<AddRouter> {
               });
             }),
           ),
-
           Flexible(
             flex: 1,
             child: Container(
@@ -56,7 +59,6 @@ class _AddRouterState extends State<AddRouter> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -65,7 +67,6 @@ class _AddRouterState extends State<AddRouter> {
           BottomNavigationBarItem(
             icon: Icon(Icons.add),
             label: 'Add',
-
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -89,42 +90,111 @@ class _AddRouterState extends State<AddRouter> {
   }
 
   Widget staffList() {
-    const NAMES = {
-      'school name': ['school of computer', 'school of bis', ''],
-      'subject': ['from db'],
-      'staff name': ['宋江', '卢俊义', '吴用', '公孙胜', '关胜'],
-    };
-
     return Container(
       color: Colors.blue[100],
       child: ListView(
         shrinkWrap: true,
-        children: NAMES.keys.map((key) {
-          return ExpansionTile(
+        children: [
+          ExpansionTile(
             title: Text(
-              key + (selected[key]!.isEmpty ? '' : ': ${selected[key]}'),
+              'school name' +
+                  (selected['school name']!.isEmpty
+                      ? ''
+                      : ': ${selected['school name']}'),
               style: TextStyle(
                 color: Colors.black54,
                 fontSize: 20,
               ),
             ),
-            children: NAMES[key]!.map((name) {
-              return ListTile(
-                title: Text(
-                  name,
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
+            children: schools
+                .map((school) => school.name)
+                .map((name) => ListTile(
+              title: Text(
+                name,
+                style: TextStyle(
+                  color: Colors.red,
                 ),
-                onTap: () {
-                  setState(() {
-                    selected[key] = name;
-                  });
-                },
-              );
-            }).toList(),
-          );
-        }).toList(),
+              ),
+              onTap: () {
+                setState(() {
+                  selected['school name'] = name;
+                  subjects = subjectsData
+                      .where((subject) =>
+                  subject.schoolName == name)
+                      .map((subject) => subject.code)
+                      .toList();
+                  tutors = tutorsData
+                      .where((tutor) =>
+                  tutor.schoolName == name)
+                      .map((tutor) => tutor.name)
+                      .toList();
+                });
+              },
+            ))
+                .toList(),
+          ),
+          ExpansionTile(
+            title: Text(
+              'subject' +
+                  (selected['subject']!.isEmpty
+                      ? ''
+                      : ': ${selected['subject']}'),
+              style: TextStyle(
+                color: Colors.black54,
+                fontSize: 20,
+              ),
+            ),
+            children: subjects
+                .map((subject) => ListTile(
+              title: Text(
+                subject,
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  selected['subject'] = subject;
+                  tutors = subjectsData
+                      .where((subj) =>
+                  subj.schoolName ==
+                      selected['school name'] &&
+                      subj.code == subject)
+                      .map((subj) => subj.tutorName)
+                      .toList();
+                });
+              },
+            ))
+                .toList(),
+          ),
+          ExpansionTile(
+            title: Text(
+              'staff name' +
+                  (selected['staff name']!.isEmpty
+                      ? ''
+                      : ': ${selected['staff name']}'),
+              style: TextStyle(
+                color: Colors.black54,
+                fontSize: 20,
+              ),
+            ),
+            children: tutors
+                .map((tutor) => ListTile(
+              title: Text(
+                tutor,
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  selected['staff name'] = tutor;
+                });
+              },
+            ))
+                .toList(),
+          ),
+        ],
       ),
     );
   }
@@ -134,6 +204,7 @@ class _AddRouterState extends State<AddRouter> {
       padding: EdgeInsets.all(20),
       color: Colors.green[100],
       child: TextField(
+        controller: _writingController,
         maxLines: null,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
@@ -154,7 +225,7 @@ class _AddRouterState extends State<AddRouter> {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
-                // Handle the submit action here
+                handleSubmit();
               },
               child: Text('Submit'),
             ),
@@ -164,6 +235,37 @@ class _AddRouterState extends State<AddRouter> {
     );
   }
 
+  void handleSubmit() {
+    String schoolName = selected['school name']!;
+    String subject = selected['subject']!;
+    String staffName = selected['staff name']!;
+    String writing = _writingController.text;
+    int rating = _selectedRating;
+
+    // Create a new RateAndReview object
+    RateAndReview newReview = RateAndReview(
+      userId: 0, // You can set this to the actual user ID if needed
+      tutorName: staffName,
+      rate: rating,
+      review: writing,
+    );
+
+    // Print the new review (you can modify this to save it to a database or perform other actions)
+    print('$schoolName $subject $staffName $writing $rating');
+
+    // Reset the state to initial values
+    setState(() {
+      selected = {
+        'school name': '',
+        'subject': '',
+        'staff name': '',
+      };
+      _selectedRating = 0;
+      _writingController.clear();
+      subjects = [];
+      tutors = [];
+    });
+  }
 
 }
 
@@ -187,9 +289,7 @@ class RatingBar extends StatelessWidget {
                 width: 20,
                 height: 20,
               ),
-            )
-
-        );
+            ));
       }),
     );
   }
@@ -224,7 +324,6 @@ class StarShape extends CustomPainter {
     final double width = size.width;
     final double height = size.height;
 
-    // 五角星的五个顶点
     final List<Offset> starPoints = [
       Offset(width / 2, 0),
       Offset(width * 0.8, height),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'tutor_list.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 // class TutorDetailPage extends StatelessWidget {
 //   final int tutorId;
@@ -21,6 +23,8 @@ import 'tutor_list.dart';
 // }
 
 class TutorListView extends StatefulWidget {
+
+
   @override
   _TutorListViewState createState() => _TutorListViewState();
 }
@@ -34,7 +38,7 @@ class _TutorListViewState extends State<TutorListView> {
     _sortedData = datas..sort((a, b) => a.indexLetter.compareTo(b.indexLetter));
   }
 
-  void _navigateToDetailPage(int tutorId, String tutorName, String tutorImageUrl) {
+  void _navigateToDetailPage(BuildContext context, int tutorId, String tutorName, String tutorImageUrl) {
     final arguments = {
       'tutorId': tutorId,
       'tutorName': tutorName,
@@ -55,6 +59,7 @@ class _TutorListViewState extends State<TutorListView> {
         final tutorData = _sortedData[index];
         return GestureDetector(
             onTap: () => _navigateToDetailPage(
+              context, // 将BuildContext传递给方法
               tutorData.id,
               tutorData.name,
               tutorData.imageUrl,
@@ -104,6 +109,10 @@ class _TutorListViewState extends State<TutorListView> {
 }
 
 class FirstRoute extends StatelessWidget {
+  // final Database database; // 添加一个名为database的参数
+
+  // FirstRoute({required this.database}); // 构造函数中初始化database参数
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

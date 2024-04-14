@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 // class TutorDetailPage extends StatelessWidget {
 //   final int tutorId;
@@ -72,6 +74,7 @@ import 'package:flutter/material.dart';
 // }
 
 class TutorDetailPage extends StatelessWidget {
+  // final Database database; // 添加一个名为database的参数
   final int? tutorId;
   final String? tutorName;
   final String? tutorImageUrl;
@@ -85,6 +88,7 @@ class TutorDetailPage extends StatelessWidget {
     required this.tutorImageUrl,
     this.rating, // 将rating属性设置为可选
     required this.bio,
+    // required this.database
   });
 
   @override

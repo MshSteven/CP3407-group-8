@@ -3,6 +3,8 @@ import 'package:project/pages/home/home.dart';
 import 'package:project/pages/add/add.dart';
 import 'package:project/pages/profile/profile.dart';
 import 'package:project/pages/tutor_detail/detail.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common/sqlite_api.dart';
 
 void main() {
   runApp(MyApp());
