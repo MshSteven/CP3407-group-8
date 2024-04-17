@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project/pages/profile/profile.dart';
 import 'data.dart';
+import 'dart:math';
 
 class AddRouter extends StatefulWidget {
   @override
@@ -235,25 +237,32 @@ class _AddRouterState extends State<AddRouter> {
     );
   }
 
-  void handleSubmit() {
+
+// 假设这个函数在一个 StatefulWidget 中
+  void handleSubmit() async {
     String schoolName = selected['school name']!;
     String subject = selected['subject']!;
     String staffName = selected['staff name']!;
     String writing = _writingController.text;
     int rating = _selectedRating;
-
-    // Create a new RateAndReview object
+    var random = Random();
+    // 生成一个0到999之间的随机整数
+    var randomNumber = random.nextInt(1000);
+    // 创建一个新的 RateAndReview 对象
     RateAndReview newReview = RateAndReview(
-      userId: 0, // You can set this to the actual user ID if needed
+      historyId: randomNumber,
+      userId: 0, // 如果需要，可以将其设置为实际用户ID
       tutorName: staffName,
       rate: rating,
       review: writing,
     );
 
-    // Print the new review (you can modify this to save it to a database or perform other actions)
+    // 打印新评论（你可以修改此处以将其保存到数据库或执行其他操作）
     print('$schoolName $subject $staffName $writing $rating');
+    // 将新评论对象添加到现有评论列表中
+    rateAndReviews.add(newReview);
 
-    // Reset the state to initial values
+    // 重置状态到初始值
     setState(() {
       selected = {
         'school name': '',
@@ -265,7 +274,19 @@ class _AddRouterState extends State<AddRouter> {
       subjects = [];
       tutors = [];
     });
+
+    // 使用 Navigator.push 返回传递的数据
+    var result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ProfileRoute(rateAndReviews: rateAndReviews)),
+    );
+
+    // 在这里处理返回的数据
+    print(result);
   }
+
+
+
 
 }
 

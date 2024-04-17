@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project/pages/home/home.dart';
 import 'package:project/pages/add/add.dart';
+import 'package:project/pages/add/data.dart';
 import 'package:project/pages/profile/profile.dart';
 import 'package:project/pages/tutor_detail/detail.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -27,7 +28,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       routes: {
         '/add': (context) => AddRouter(),
-        '/profile': (context) => ProfileRoute(),
+        '/profile': (context) => ProfileRoute(rateAndReviews: rateAndReviews),
         '/detail': (context) {
           final arguments = ModalRoute.of(context)?.settings.arguments;
           if (arguments is Map<String, dynamic>) {

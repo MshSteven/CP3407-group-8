@@ -1,4 +1,9 @@
 // data.dart
+import 'dart:math';
+
+var random = Random();
+// 生成一个0到99之间的随机整数
+var randomNumber = random.nextInt(1000);
 
 class Tutor {
   final String name;
@@ -47,17 +52,27 @@ class User {
 }
 
 class RateAndReview {
+  final int historyId;
   final int userId;
   final String tutorName;
   final int rate;
   final String review;
 
   RateAndReview({
+    required this.historyId,
     required this.userId,
     required this.tutorName,
     required this.rate,
     required this.review,
   });
+
+  String toHistoryContent() {
+    return "userId: $userId\n"
+        "tutorName: $tutorName\n"
+        "rate: $rate\n"
+        "review: $review\n";
+  }
+
 }
 
 // 学校数据集合
@@ -196,36 +211,42 @@ List<User> users = [
 // 评分和评论数据集合
 List<RateAndReview> rateAndReviews = [
   RateAndReview(
+    historyId: random.nextInt(1000),
     userId: 2,
     tutorName: 'Alice Smith',
     rate: 4,
     review: 'Good tutor!',
   ),
   RateAndReview(
+    historyId: random.nextInt(1000),
     userId: 3,
     tutorName: 'Bob Johnson',
     rate: 5,
     review: 'Excellent tutor!',
   ),
   RateAndReview(
+    historyId: random.nextInt(1000),
     userId: 4,
     tutorName: 'Carol Brown',
     rate: 4,
     review: 'Great tutor!',
   ),
   RateAndReview(
+    historyId: random.nextInt(1000),
     userId: 5,
     tutorName: 'David Wilson',
     rate: 5,
     review: 'Awesome tutor!',
   ),
   RateAndReview(
+    historyId: random.nextInt(1000),
     userId: 6,
     tutorName: 'Emily Johnson',
     rate: 4,
     review: 'Helped me a lot!',
   ),
   RateAndReview(
+    historyId: random.nextInt(1000),
     userId: 7,
     tutorName: 'Frank Garcia',
     rate: 5,
